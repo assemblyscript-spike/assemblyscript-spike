@@ -8,7 +8,11 @@
       // fetch('./o/index.wasm') // 网络加载 f.wasm 文件
       fetch('./build/untouched.wasm') // 网络加载 f.wasm 文件
       .then(res => res.arrayBuffer()) // 转成 ArrayBuffer
-      .then(WebAssembly.instantiate) // 编译为当前 CPU 架构的机器码 + 实例化
+      .then(rs => WebAssembly.instantiate(rs, {
+        window: {
+          alert: window.console
+        }
+      })) // 编译为当前 CPU 架构的机器码 + 实例化
       .then(mod => { // 调用模块实例上的 f 函数计算
         console.log(mod.instance.exports.f(30));
       });
